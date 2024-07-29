@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   FileTypeValidator,
+  Get,
   ParseFilePipe,
   Post,
   UploadedFile,
@@ -44,5 +45,19 @@ export class PatientController {
       phoneNumber: createdPatient.phone_number,
       photoPath: createdPatient.photo_path,
     };
+  }
+
+  @Get()
+  async getAllPatients(): Promise<Patient[]> {
+    const patientsList = await this.service.getAllPatients();
+    return patientsList.map(
+      ({ name, address, email, phone_number, photo_path }) => ({
+        name,
+        address,
+        email,
+        phoneNumber: phone_number,
+        photoPath: photo_path,
+      }),
+    );
   }
 }

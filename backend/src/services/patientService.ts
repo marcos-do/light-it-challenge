@@ -5,7 +5,12 @@ import { PrismaService } from './prisma.service';
 @Injectable()
 export class PatientService {
   constructor(private prisma: PrismaService) {}
+
   createPatient(data: Prisma.PatientCreateInput): Promise<Patient> {
     return this.prisma.patient.create({ data });
+  }
+
+  getAllPatients(): Promise<Patient[]> {
+    return this.prisma.patient.findMany();
   }
 }
