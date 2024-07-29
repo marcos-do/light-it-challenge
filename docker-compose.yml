@@ -12,6 +12,12 @@ services:
       - 3306:3306
     networks:
       - mynetwork
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    volumes:
+      - ./db/initdb.d:/docker-entrypoint-initdb.d
 
   backend:
     build: 
@@ -20,7 +26,8 @@ services:
     ports:
       - "3001:3001"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - mynetwork
 
