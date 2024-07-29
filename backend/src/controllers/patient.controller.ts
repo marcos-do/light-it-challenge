@@ -11,11 +11,15 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes } from '@nestjs/swagger';
 import { Patient, PatientDTO } from 'src/model/patient';
-import { PatientService } from 'src/services/patientService';
+import { EmailService } from 'src/services/email.service';
+import { PatientService } from 'src/services/patient.service';
 
 @Controller('patient')
 export class PatientController {
-  constructor(private readonly service: PatientService) {}
+  constructor(
+    private readonly patientService: PatientService,
+    private readonly emailService: EmailService,
+  ) {}
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
@@ -31,13 +35,17 @@ export class PatientController {
     // file: Express.Multer.File,
   ): Promise<Patient> {
     const { name, email, phoneNumber, address } = createDTO;
-    const createdPatient = await this.service.createPatient({
+    const createdPatient = await this.patientService.createPatient({
       name,
       email,
       address,
       phone_number: phoneNumber,
       photo_path: 'path/to/photo',
     });
+    this.emailService.sendMail(
+      createdPatient.email,
+      JSON.stringify(createdPatient),
+    );
     return {
       name: createdPatient.name,
       email: createdPatient.email,
@@ -49,7 +57,7 @@ export class PatientController {
 
   @Get()
   async getAllPatients(): Promise<Patient[]> {
-    const patientsList = await this.service.getAllPatients();
+    const patientsList = await this.patientService.getAllPatients();
     return patientsList.map(
       ({ name, address, email, phone_number, photo_path }) => ({
         name,
