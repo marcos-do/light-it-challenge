@@ -1,16 +1,23 @@
 import React from "react";
 import PatientCard from "../cards/PatientCard";
 import { Patient } from "../../types/patient";
-import './PatientList.css'
+import { useNavigate } from "react-router-dom";
+import "./PatientList.css";
 
 interface PatientListProps {
   patients: Patient[];
 }
 
 const PatientList: React.FC<PatientListProps> = ({ patients }) => {
+  const navigate = useNavigate();
+  const navigateToForm = () => {
+    navigate("/form");
+  };
   return (
     <div className="patient-list-container">
-      <button className="add-patient-button">Add patient</button>
+      <button className="add-patient-button" onClick={navigateToForm}>
+        Add patient
+      </button>
       {patients.length === 0 ? (
         <div className="empty-state">No patients available. Click "Add patient" to create one.</div>
       ) : (

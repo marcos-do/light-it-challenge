@@ -5,3 +5,10 @@ export interface Patient {
   phoneNumber: number;
   photoPath: string;
 }
+
+export interface PatientRequest {
+  address: string;
+  email: string;
+  name: string;
+  phoneNumber: number;
+}

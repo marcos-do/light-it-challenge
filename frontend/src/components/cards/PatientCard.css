@@ -4,7 +4,7 @@
     margin: 10px;
     padding: 10px;
     cursor: pointer;
-    min-width: 300px;
+    min-width: 500px;
 }
 
 .patient-card-header {
@@ -21,4 +21,5 @@
 
 .patient-card-body {
     margin-top: 10px;
+    text-align: left;
 }
