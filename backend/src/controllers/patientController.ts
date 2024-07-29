@@ -9,15 +9,16 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes } from '@nestjs/swagger';
-import { PatientDTO } from 'src/model/patient';
+import { Patient, PatientDTO } from 'src/model/patient';
+import { PatientService } from 'src/services/patientService';
 
-@Controller("patient")
+@Controller('patient')
 export class PatientController {
-  constructor() {}
+  constructor(private readonly service: PatientService) {}
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
-  postPatient(
+  async postPatient(
     @Body() createDTO: PatientDTO,
     // @UploadedFile(
     //   new ParseFilePipe({
@@ -27,7 +28,21 @@ export class PatientController {
     //   }),
     // )
     // file: Express.Multer.File,
-  ): PatientDTO {
-    return createDTO;
+  ): Promise<Patient> {
+    const { name, email, phoneNumber, address } = createDTO;
+    const createdPatient = await this.service.createPatient({
+      name,
+      email,
+      address,
+      phone_number: phoneNumber,
+      photo_path: 'path/to/photo',
+    });
+    return {
+      name: createdPatient.name,
+      email: createdPatient.email,
+      address: createdPatient.address,
+      phoneNumber: createdPatient.phone_number,
+      photoPath: createdPatient.photo_path,
+    };
   }
 }
