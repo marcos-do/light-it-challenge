@@ -19,10 +19,3 @@ export class Patient {
   phoneNumber: number;
   photoPath: string;
 }
-
-// {
-    // "name": "Marcos",
-    // "address": "H",
-    // "email": "a@gmail.com",
-    // "phoneNumber": 1
-//     }

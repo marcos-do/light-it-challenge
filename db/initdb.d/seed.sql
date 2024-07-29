@@ -5,7 +5,7 @@ CREATE TABLE Patient(
     name varchar(50),
     email varchar(100),
     address varchar(150),
-    phone_number int,
+    phone_number MEDIUMINT,
     photo_path varchar(255),
     PRIMARY KEY (id)
 );

@@ -3,6 +3,9 @@ import "../styles.css";
 import Modal from "../components/modals/Modal";
 import { usePostPatient } from "../hooks/patientService";
 import { PatientRequest } from "../types/patient";
+import PrimaryButton from "../components/buttons/PrimaryButton";
+import SecondaryButton from "../components/buttons/SecondaryButton";
+import { useNavigate } from "react-router-dom";
 
 interface FormError {
   name?: string;
@@ -46,6 +49,8 @@ const Form: React.FC = () => {
     patientHook.postPatient(patient).then(console.log);
   };
 
+  const navigate = useNavigate();
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
     const newErrors = validateForm();
@@ -74,15 +79,27 @@ const Form: React.FC = () => {
     }
   };
 
-  const handleDrop = (e: any) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
+  const loadFile = (file: any) => {
     if (file && file.type === "image/jpeg") {
       setPhoto(file);
       setErrors((prev) => ({ ...prev, photo: "" }));
     } else {
-      setErrors((prev) => ({ ...prev, photo: "Document photo must be a .jpg image." }));
+      setErrors((prev) => ({
+        ...prev,
+        photo: "Document photo must be a .jpg image.",
+      }));
     }
+  };
+
+  const handleDrop = (e: any) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    loadFile(file);
+  };
+
+  const handleFileChange = (e: any) => {
+    const file = e.target.files[0];
+    loadFile(file);
   };
 
   return (
@@ -91,40 +108,77 @@ const Form: React.FC = () => {
       <form className="patient-form" onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="name">Name:</label>
-          <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} />
+          <input
+            type="text"
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
           {errors.name && <span className="error">{errors.name}</span>}
         </div>
         <div className="form-group">
           <label htmlFor="email">Email:</label>
-          <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
           {errors.email && <span className="error">{errors.email}</span>}
         </div>
         <div className="form-group">
           <label htmlFor="address">Address:</label>
-          <input type="text" id="address" value={address} onChange={(e) => setAddress(e.target.value)} />
+          <input
+            type="text"
+            id="address"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+          />
           {errors.address && <span className="error">{errors.address}</span>}
         </div>
         <div className="form-group">
           <label htmlFor="phoneNumber">Phone Number:</label>
-          <input type="text" id="phoneNumber" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
-          {errors.phoneNumber && <span className="error">{errors.phoneNumber}</span>}
+          <input
+            type="text"
+            id="phoneNumber"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+          />
+          {errors.phoneNumber && (
+            <span className="error">{errors.phoneNumber}</span>
+          )}
         </div>
         <div className="form-group">
           <label>Document Photo:</label>
-          <div className="drop-zone" onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
+          <div
+            className="drop-zone"
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={handleDrop}
+          >
+            <input type="file" onChange={handleFileChange}></input>
             {photo ? (
-              <img src={URL.createObjectURL(photo)} alt="Document" className="photo-preview" />
+              <img
+                src={URL.createObjectURL(photo)}
+                alt="Document"
+                className="photo-preview"
+              />
             ) : (
-              <span>Drag and drop a .jpg file here, or click to select a file</span>
+              <span>
+                Drag and drop a .jpg file here, or click to select a file
+              </span>
             )}
           </div>
           {errors.photo && <span className="error">{errors.photo}</span>}
         </div>
-        <button type="submit" className="submit-button">
-          Add Patient
-        </button>
-        <Modal show={showModal} title={modalTitle} message={modalMessage} onClose={() => setShowModal(false)} />
+        <PrimaryButton type="submit">Add</PrimaryButton>
+        <Modal
+          show={showModal}
+          title={modalTitle}
+          message={modalMessage}
+          onClose={() => setShowModal(false)}
+        />
       </form>
+      <SecondaryButton onClick={() => navigate("/")}>Back</SecondaryButton>
     </>
   );
 };

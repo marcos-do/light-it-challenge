@@ -1,10 +1,12 @@
 .patient-card {
     border: 1px solid #ddd;
-    border-radius: 4px;
+    border-radius: 8px;
     margin: 10px;
     padding: 10px;
     cursor: pointer;
-    min-width: 500px;
+    min-width: 300px;
+    width: 60%;
+    background-color: white;
 }
 
 .patient-card-header {

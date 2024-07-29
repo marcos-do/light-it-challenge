@@ -25,14 +25,6 @@ export class PatientController {
   @UseInterceptors(FileInterceptor('file'))
   async postPatient(
     @Body() createDTO: PatientDTO,
-    // @UploadedFile(
-    //   new ParseFilePipe({
-    //     validators: [
-    //       new FileTypeValidator({ fileType: 'image/jpeg, image/png' }),
-    //     ],
-    //   }),
-    // )
-    // file: Express.Multer.File,
   ): Promise<Patient> {
     const { name, email, phoneNumber, address } = createDTO;
     const createdPatient = await this.patientService.createPatient({

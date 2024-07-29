@@ -30,6 +30,4 @@ sudo docker compose up
 Aplicación de Node.js con la biblioteca NestJS y Prima como ORM
 
 ## Frontend
-Aplicación de React creada con CRA.
-
-Diseño elegido https://dribbble.com/shots/21234580-Fedbly-team-view
+Aplicaciónc web responsive de React creada con CRA.
